@@ -1,6 +1,9 @@
 import fs from "fs"; //import nodejs core library
+import rl from "readline-sync";
 
-const folderToRead = process.argv[2]; // grab third array argument
+const folderToRead =
+  process.argv[2] ||
+  rl.question("Please provide a path to your subtitle folder...\n"); // grab third array argument
 
 if (!fs.existsSync(folderToRead)) {
   //check if folder does not exist
@@ -34,4 +37,5 @@ if (!fs.existsSync(folderToRead)) {
   });
 
   console.log(uniqueWords);
+  console.log(wordsWithOccurrence);
 }
