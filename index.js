@@ -10,6 +10,19 @@ for (let i = 0; i < folderContents.length; i++) {
     "back_to_the_future_dutch/" + folderContents[i]
   );
 }
-allContent = allContent.replace(/[^a-z]/gi, " "); //alle niet letters vervangen door een spatie
-allContent = allContent.replace(/ +/g, " ");
+//regex expressions
+allContent = allContent
+  .replace(/[^a-z]/gi, " ")
+  .replace(/font|color/gi, " ")
+  .replace(/ +/g, " ")
+  .toLowerCase()
+  .split(" ")
+  .filter(function (woord) {
+    if (woord.length >= 4) {
+      return true;
+    } else {
+      return false;
+    }
+  });
 console.log(allContent);
+//alle niet letters vervangen door een spatie
