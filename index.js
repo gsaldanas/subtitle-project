@@ -1,28 +1,37 @@
-import fs from "fs";
+import fs from "fs"; //import nodejs core library
 
-const folderContents = fs.readdirSync("back_to_the_future_dutch");
-console.log(folderContents);
+const folderToRead = process.argv[2]; // grab third array argument
 
-let allContent = "";
-//use for loop to go trough the data of the array
-for (let i = 0; i < folderContents.length; i++) {
-  allContent += fs.readFileSync(
-    "back_to_the_future_dutch/" + folderContents[i]
-  );
-}
-//regex expressions
-allContent = allContent
-  .replace(/[^a-z]/gi, " ")
-  .replace(/font|color/gi, " ")
-  .replace(/ +/g, " ")
-  .toLowerCase()
-  .split(" ")
-  .filter(function (woord) {
-    if (woord.length >= 4) {
-      return true;
-    } else {
-      return false;
-    }
+if (!fs.existsSync(folderToRead)) {
+  //check if folder does not exist
+  console.log("Folder could not be found !!!");
+} else {
+  //folder exist
+  const folderContents = fs.readdirSync(folderToRead);
+  let allContent = "";
+  for (let i = 0; i < folderContents.length; i++) {
+    allContent += fs.readFileSync(folderToRead + "/" + folderContents[i]);
+  }
+  allContent = allContent
+    .replace(/[^a-z]/gi, " ")
+    .replace(/font|color/gi, " ")
+    .replace(/ +/g, " ")
+    .toLowerCase()
+    .split(" ")
+    .filter(function (word) {
+      return word.length >= 4;
+    });
+
+  const wordsWithOccurrence = allContent.reduce(function (obj, word) {
+    obj[word] = obj[word] + 1 || 1;
+    return obj;
+  }, {});
+
+  const uniqueWords = Object.keys(wordsWithOccurrence);
+
+  uniqueWords.sort(function (wordA, wordB) {
+    return wordsWithOccurrence[wordB] - wordsWithOccurrence[wordA];
   });
-console.log(allContent);
-//alle niet letters vervangen door een spatie
+
+  console.log(uniqueWords);
+}
